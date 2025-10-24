@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backend CRE - SIFIDEV20</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #004c8c;
+      margin-bottom: 0.5em;
+    }
+    #contador {
+      background: #fff;
+      padding: 10px 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    button {
+      background: #0070f3;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005bb5;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      max-width: 500px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Interfaz Backend CRE - SIFIDEV20</h1>
+  <div id="contador">Peticiones realizadas: <span id="total">0</span></div>
+
+  <form id="apiForm">
+    <label for="endpoint">Endpoint</label>
+    <input type="text" id="endpoint" placeholder="/api/permiso" required />
+
+    <label for="method">Método</label>
+    <select id="method">
+      <option value="GET">GET</option>
+      <option value="POST">POST</option>
+    </select>
+
+    <label for="body">Body (JSON opcional)</label>
+    <textarea id="body" rows="5" placeholder='{"param": "valor"}'></textarea>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <h3>Respuesta del servidor:</h3>
+  <pre id="response">...</pre>
+
+  <script>
+    const form = document.getElementById('apiForm');
+    const responseEl = document.getElementById('response');
+    const totalEl = document.getElementById('total');
+
+    // Cargar contador guardado
+    let total = parseInt(localStorage.getItem('contadorPeticiones') || '0');
+    totalEl.textContent = total;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const endpoint = document.getElementById('endpoint').value.trim();
+      const method = document.getElementById('method').value;
+      const body = document.getElementById('body').value;
+
+      try {
+        const options = { method, headers: { 'Content-Type': 'application/json' } };
+        if (method === 'POST' && body) options.body = body;
+
+        const res = await fetch(endpoint, options);
+        const data = await res.json().catch(() => res.text());
+        responseEl.textContent = JSON.stringify(data, null, 2);
+
+        // Incrementar contador
+        total++;
+        localStorage.setItem('contadorPeticiones', total);
+        totalEl.textContent = total;
+
+      } catch (err) {
+        responseEl.textContent = `Error: ${err.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
