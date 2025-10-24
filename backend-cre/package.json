@@ -1,0 +1,14 @@
+﻿{
+  "name": "backend-cre",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "p-limit": "^5.0.0",
+    "node-cache": "^5.1.2"
+  }
+}
