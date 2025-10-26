@@ -15,6 +15,11 @@ service cloud.firestore {
       match /{document=**} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
+      
+      // Permisos específicos para la colección de coeficientes
+      match /coeficientes/{coeficienteId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
     }
   }
 }
