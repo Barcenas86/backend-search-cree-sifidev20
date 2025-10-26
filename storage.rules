@@ -1,0 +1,14 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para almacenamiento de archivos vinculados a clientes
+    match /clientes/{clienteId}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == clienteId;
+    }
+    
+    // Backward compatibility para estructura antigua
+    match /users/{userId}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

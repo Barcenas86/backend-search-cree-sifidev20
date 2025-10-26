@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vercel dev",
+    "dev": "echo No direct dev script, please use 'vercel dev' manually.",
     "start": "vercel dev"
   },
   "dependencies": {
     "ajv": "^6.12.6",
     "ajv-cli": "^4.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "node-cache": "^5.1.2",
     "node-fetch": "^3.3.2",
     "p-limit": "^5.0.0"

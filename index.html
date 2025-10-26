@@ -73,16 +73,16 @@
 
   <form id="apiForm">
     <label for="endpoint">Endpoint</label>
-    <input type="text" id="endpoint" placeholder="/api/permiso" required />
+    <input type="text" id="endpoint" value="/api/verify" placeholder="/api/permiso" required />
 
     <label for="method">Método</label>
     <select id="method">
+      <option value="POST" selected>POST</option>
       <option value="GET">GET</option>
-      <option value="POST">POST</option>
     </select>
 
     <label for="body">Body (JSON opcional)</label>
-    <textarea id="body" rows="5" placeholder='{"param": "valor"}'></textarea>
+    <textarea id="body" rows="5" placeholder='{"param": "valor"}'>{"permitNumber": "TEST-CONNECTION"}</textarea>
 
     <button type="submit">Enviar</button>
   </form>
@@ -107,9 +107,15 @@
 
       try {
         const options = { method, headers: { 'Content-Type': 'application/json' } };
-        if (method === 'POST' && body) options.body = body;
+        if (method === 'POST' && body) {
+          options.body = body;
+        }
 
-        const res = await fetch(endpoint, options);
+        const apiUrl = `http://localhost:3000${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
+        console.log('Sending request to:', apiUrl);
+        console.log('Request options:', options);
+
+        const res = await fetch(apiUrl, options);
         const data = await res.json().catch(() => res.text());
         responseEl.textContent = JSON.stringify(data, null, 2);
 
